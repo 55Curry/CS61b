@@ -17,8 +17,7 @@ public class TestMaxTileExists {
     public void testEmptyBoard() {
         int[][] rawVals = new int[][] {
                 {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
+                {0, 0, 0, 0},                {0, 0, 0, 0},
                 {0, 0, 0, 0},
         };
 

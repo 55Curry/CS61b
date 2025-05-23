@@ -58,6 +58,9 @@ public class IntList {
      * IntList mySmallerList = IntList.of(1, 4, 9);
      */
     public static IntList of(int ...argList) {
+        if(argList == null){
+            return new IntList(0,null);
+        }
         if (argList.length == 0)
             return null;
         int[] restList = new int[argList.length - 1];
