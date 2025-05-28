@@ -1,7 +1,9 @@
 package capers;
 
 import java.io.File;
-import static capers.Utils.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 
 /** A repository for Capers 
  * @author TODO
@@ -18,7 +20,7 @@ public class CapersRepository {
     static final File CWD = new File(System.getProperty("user.dir"));
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = null; // TODO Hint: look at the `join`
+    static final File CAPERS_FOLDER = Utils.join(CWD, ".capers"); // TODO Hint: look at the `join`
                                             //      function in Utils
 
     /**
@@ -32,6 +34,15 @@ public class CapersRepository {
      */
     public static void setupPersistence() {
         // TODO
+        CAPERS_FOLDER.mkdirs();
+        File dog_file = new File(CAPERS_FOLDER,"dogs");
+        dog_file.mkdir();
+        File story = new File(CAPERS_FOLDER,"story");
+        try {
+            story.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -39,8 +50,13 @@ public class CapersRepository {
      * to a file called `story` in the .capers directory.
      * @param text String of the text to be appended to the story
      */
-    public static void writeStory(String text) {
-        // TODO
+    public static void writeStory(String text) throws IOException {
+        File f = Utils.join(CWD,".capers", "story");
+        FileWriter fw = new FileWriter(f,true);
+        fw.write(text + System.lineSeparator());
+        fw.close();
+        System.out.println(Utils.readContentsAsString(f));
+
     }
 
     /**
@@ -49,7 +65,9 @@ public class CapersRepository {
      * Also prints out the dog's information using toString().
      */
     public static void makeDog(String name, String breed, int age) {
-        // TODO
+        Dog d = new Dog (name, breed, age);
+        System.out.println(d.toString());
+        d.saveDog();
     }
 
     /**
@@ -60,5 +78,12 @@ public class CapersRepository {
      */
     public static void celebrateBirthday(String name) {
         // TODO
+        Dog dog = Dog.fromFile(name);
+        if (dog == null){
+            Utils.exitWithError("No dog with that name exists.");
+            return;
+        }
+        dog.haveBirthday();
+        dog.saveDog();
     }
 }
